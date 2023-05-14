@@ -31,8 +31,4 @@ public class SerializableImage implements Serializable {
     private void readObject(java.io.ObjectInputStream in) throws IOException {
         setImage(ImageIO.read(new MemoryCacheImageInputStream(in)));
     }
-
-    public void clear() {
-        image = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB);
-    }
 }

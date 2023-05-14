@@ -22,17 +22,17 @@ public class WhiteboardClient extends JFrame {
         frame.setLayout(null);
         frame.setSize(1000, 800);
 
-        JRadioButton lineButton = new JRadioButton(LINE);
-        JRadioButton circleButton = new JRadioButton(CIRCLE);
-        JRadioButton ovalButton = new JRadioButton(OVAL);
-        JRadioButton rectangleButton = new JRadioButton(RECTANGLE);
-        JRadioButton textButton = new JRadioButton(TEXT);
+        JButton lineButton = new JButton(LINE);
+        JButton circleButton = new JButton(CIRCLE);
+        JButton ovalButton = new JButton(OVAL);
+        JButton rectangleButton = new JButton(RECTANGLE);
+        JButton textButton = new JButton(TEXT);
 
-        circleButton.setBounds(10, 5, 60, 40);
-        ovalButton.setBounds(10, 5, 60, 40);
-        rectangleButton.setBounds(80, 5, 100, 40);
-        lineButton.setBounds(190, 5, 60, 40);
-        textButton.setBounds(260, 5, 60, 40);
+        lineButton.setBounds(10, 5, 60, 36);
+        circleButton.setBounds(80, 5, 60, 36);
+        rectangleButton.setBounds(150, 5, 100, 36);
+        ovalButton.setBounds(260, 5, 60, 36);
+        textButton.setBounds(330, 5, 60, 36);
 
         ButtonGroup group = new ButtonGroup();
         group.add(circleButton);
@@ -57,14 +57,14 @@ public class WhiteboardClient extends JFrame {
         textButton.setActionCommand(TEXT);
 
         lineButton.addActionListener(paint.Tool_Listener);
-        circleButton.doClick();
+        lineButton.doClick();
         circleButton.addActionListener(paint.Tool_Listener);
         ovalButton.addActionListener(paint.Tool_Listener);
         rectangleButton.addActionListener(paint.Tool_Listener);
         textButton.addActionListener(paint.Tool_Listener);
 
         WhiteboardPanel whiteboardPanel = new WhiteboardPanel(paint);
-        whiteboardPanel.setBounds(10, 50 , 600, 600);
+        whiteboardPanel.setBounds(10, 50 , 980, 600);
         frame.add(buttonPanel);
         frame.add(whiteboardPanel);
         frame.setVisible(true);

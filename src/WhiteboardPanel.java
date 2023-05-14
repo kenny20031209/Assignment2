@@ -76,13 +76,9 @@ public class WhiteboardPanel extends JPanel implements MouseListener, MouseMotio
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        Point endPoint = e.getPoint();
+        endPoint = e.getPoint();
         String shapeType = paint.getShapeType();
         switch (shapeType) {
-            case LINE -> {
-                paint.drawLine(startPoint, endPoint);
-                break;
-            }
             case CIRCLE -> {
                 paint.drawCircle(startPoint, endPoint);
                 break;
@@ -100,8 +96,9 @@ public class WhiteboardPanel extends JPanel implements MouseListener, MouseMotio
                 if(!text.isEmpty()){
                     paint.drawText(text, startPoint);
                 }
+                break;
             }
-            default -> System.out.println("No tool selected");
+            default -> paint.drawLine(startPoint, endPoint);
         }
         repaint();
     }

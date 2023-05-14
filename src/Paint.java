@@ -7,7 +7,6 @@ import java.rmi.RemoteException;
 public class Paint {
     private String shapeType;
     private RemoteCanvas remoteCanvas;
-    Point startPoint, endPoint;
 
     public final ActionListener Tool_Listener = new ActionListener() {
         @Override
@@ -43,7 +42,7 @@ public class Paint {
         int width = (int) Math.abs(start.getX() - end.getX());
 
         try{
-            remoteCanvas.makeCircle(x, y, width, width);
+            remoteCanvas.makeCircle(x, y, width);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -88,14 +87,6 @@ public class Paint {
             remoteCanvas.setImage(new SerializableImage(image));
         } catch (RemoteException ex) {
             ex.printStackTrace();
-        }
-    }
-
-    public void clearCanvas() {
-        try {
-            remoteCanvas.clear();
-        } catch (RemoteException e) {
-            e.printStackTrace();
         }
     }
 }

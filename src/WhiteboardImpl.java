@@ -21,7 +21,7 @@ public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas 
     public void makeText(String text, int x, int y) throws RemoteException {
         Graphics graphics = img.getImage().getGraphics();
         graphics.setColor(Color.BLACK);
-        graphics.setFont(new Font("Arial", Font.PLAIN,20));
+        graphics.setFont(new Font("Arial", Font.PLAIN,16));
         graphics.drawString(text, x, y);
     }
     @Override
@@ -32,10 +32,10 @@ public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas 
     }
 
     @Override
-    public void makeCircle(int x, int y, int width, int height) throws RemoteException {
+    public void makeCircle(int x, int y, int width) throws RemoteException {
         Graphics graphics = img.getImage().getGraphics();
         graphics.setColor(Color.BLACK);
-        graphics.drawOval(x, y, width, height);
+        graphics.drawOval(x, y, width, width);
     }
 
     @Override
@@ -54,9 +54,5 @@ public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas 
 
     public void setImage(SerializableImage image) throws RemoteException {
         img = image;
-    }
-
-    public void clear() throws RemoteException {
-        img.clear();
     }
 }
