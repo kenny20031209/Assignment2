@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class WhiteboardClient extends JFrame {
+public class Whiteboard extends JFrame {
     private Paint paint;
     private static final String LINE = "Line";
     private static final String CIRCLE = "Circle";
@@ -13,7 +13,7 @@ public class WhiteboardClient extends JFrame {
             Color.GRAY, Color.GREEN, Color.LIGHT_GRAY, Color.MAGENTA,
             Color.ORANGE, Color.PINK, Color.RED, new Color(0,0,128), Color.YELLOW,
             new Color(128, 0, 128), new Color(0, 128, 128), new Color(128, 128, 0)};
-    public WhiteboardClient() {
+    public Whiteboard() {
         this.paint = new Paint();
         JFrame frame = new JFrame("Whiteboard");
         frame.setLayout(null);
@@ -34,11 +34,11 @@ public class WhiteboardClient extends JFrame {
         rectangleButton.setBounds(150, 5, 100, 36);
         ovalButton.setBounds(260, 5, 60, 36);
         textButton.setBounds(330, 5, 60, 36);
-        colorComboBox.setBounds(400, 5, 100, 40);
+        colorComboBox.setBounds(400, 5, 130, 40);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
-        buttonPanel.setBounds(0, 0, 500, 40);
+        buttonPanel.setBounds(0, 0, 550, 40);
         buttonPanel.add(circleButton);
         buttonPanel.add(rectangleButton);
         buttonPanel.add(lineButton);
@@ -52,12 +52,12 @@ public class WhiteboardClient extends JFrame {
         rectangleButton.setActionCommand(RECTANGLE);
         textButton.setActionCommand(TEXT);
 
-        lineButton.addActionListener(paint.Tool_Listener);
+        lineButton.addActionListener(paint.shapeListener);
         lineButton.doClick();
-        circleButton.addActionListener(paint.Tool_Listener);
-        ovalButton.addActionListener(paint.Tool_Listener);
-        rectangleButton.addActionListener(paint.Tool_Listener);
-        textButton.addActionListener(paint.Tool_Listener);
+        circleButton.addActionListener(paint.shapeListener);
+        ovalButton.addActionListener(paint.shapeListener);
+        rectangleButton.addActionListener(paint.shapeListener);
+        textButton.addActionListener(paint.shapeListener);
         paint.setColor(colors[0]);
         colorComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -67,7 +67,6 @@ public class WhiteboardClient extends JFrame {
                 }
             }
         });
-
 
         WhiteboardPanel whiteboardPanel = new WhiteboardPanel(paint);
         whiteboardPanel.setBounds(10, 50 , 980, 800);

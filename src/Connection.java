@@ -16,7 +16,7 @@ public class Connection {
         this.socket = socket;
     }
 
-    public void Connect(WhiteboardClient whiteboardClient, String username){
+    public void Connect(Whiteboard whiteboard, String username){
         JSONObject object = new JSONObject();
         JSONParser parser = new JSONParser();
 

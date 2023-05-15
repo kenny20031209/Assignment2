@@ -5,7 +5,7 @@ import java.rmi.registry.Registry;
 
 public class CreateWhiteboard {
     public static void main(String args[]){
-        WhiteboardClient client = new WhiteboardClient();
+        Whiteboard client = new Whiteboard();
         try{
             Registry registry = LocateRegistry.getRegistry("localhost",1233);
             RemoteCanvas remoteCanvas = (RemoteCanvas) registry.lookup("RemoteCanvas");

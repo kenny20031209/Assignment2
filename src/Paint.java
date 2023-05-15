@@ -9,7 +9,7 @@ public class Paint {
     private Color shapeColor;
     private RemoteCanvas remoteCanvas;
 
-    public final ActionListener Tool_Listener = new ActionListener() {
+    public final ActionListener shapeListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             shapeType = e.getActionCommand();
