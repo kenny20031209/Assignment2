@@ -12,10 +12,10 @@ public interface RemoteCanvas extends Remote{
 //    Ellipse2D.Double drawOval(Point start, Point end) throws RemoteException;
 //    Rectangle2D.Double drawRectangle(Point start, Point end) throws RemoteException;
     SerializableImage getImage() throws RemoteException;
-    void makeText(String text, int x, int y) throws RemoteException;
+    void makeText(String text, int x, int y, Color color) throws RemoteException;
     void makeLine(int x1, int y1, int x2, int y2, Color color) throws RemoteException;
-    void makeCircle(int x, int y, int radius) throws RemoteException;
-    void makeOval(int x, int y, int width, int height) throws RemoteException;
-    void makeRectangle(int x, int y, int width, int height) throws RemoteException;
+    void makeCircle(int x, int y, int radius, Color color) throws RemoteException;
+    void makeOval(int x, int y, int width, int height, Color color) throws RemoteException;
+    void makeRectangle(int x, int y, int width, int height, Color color) throws RemoteException;
     void setImage(SerializableImage image) throws RemoteException;
 }

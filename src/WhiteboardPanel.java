@@ -94,7 +94,7 @@ public class WhiteboardPanel extends JPanel implements MouseListener, MouseMotio
                 }
                 break;
             }
-            default -> paint.drawLine(startPoint, endPoint, shapeColor);
+            default -> paint.drawLine(startPoint, endPoint);
         }
         repaint();
     }

@@ -34,7 +34,7 @@ public class WhiteboardClient extends JFrame {
         rectangleButton.setBounds(150, 5, 100, 36);
         ovalButton.setBounds(260, 5, 60, 36);
         textButton.setBounds(330, 5, 60, 36);
-        colorComboBox.setBounds(400, 5, 100, 36);
+        colorComboBox.setBounds(400, 5, 100, 40);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
@@ -58,6 +58,7 @@ public class WhiteboardClient extends JFrame {
         ovalButton.addActionListener(paint.Tool_Listener);
         rectangleButton.addActionListener(paint.Tool_Listener);
         textButton.addActionListener(paint.Tool_Listener);
+        paint.setColor(colors[0]);
         colorComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int index = colorComboBox.getSelectedIndex();
