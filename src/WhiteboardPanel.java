@@ -1,18 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.ArrayList;
 
 import static javax.swing.JOptionPane.showInputDialog;
 
 public class WhiteboardPanel extends JPanel implements MouseListener, MouseMotionListener{
     private Paint paint;
     private Point startPoint, endPoint;
-    private static final String LINE = "Line";
+    private Color shapeColor;
     private static final String CIRCLE = "Circle";
     private static final String OVAL = "Oval";
     private static final String RECTANGLE = "Rectangle";
@@ -92,13 +88,13 @@ public class WhiteboardPanel extends JPanel implements MouseListener, MouseMotio
                 break;
             }
             case TEXT -> {
-                String text = showInputDialog("Input the text:");
+                String text = showInputDialog("Input text:");
                 if(!text.isEmpty()){
                     paint.drawText(text, startPoint);
                 }
                 break;
             }
-            default -> paint.drawLine(startPoint, endPoint);
+            default -> paint.drawLine(startPoint, endPoint, shapeColor);
         }
         repaint();
     }
