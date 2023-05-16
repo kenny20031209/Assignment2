@@ -1,7 +1,10 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 public class Paint {
@@ -90,6 +93,25 @@ public class Paint {
             remoteCanvas.setImage(new SerializableImage(image));
         } catch (RemoteException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void saveImage(String fileName) {
+        File file = new File(fileName);
+        try {
+           ImageIO.write(this.getRemoteCanvas().getImage().getImage(), "png", file);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearWhiteboard(){
+        try {
+            remoteCanvas.clear();
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 }

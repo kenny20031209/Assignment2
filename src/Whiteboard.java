@@ -1,12 +1,17 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.rmi.RemoteException;
+
+import static javax.swing.JOptionPane.showInputDialog;
 
 public class Whiteboard extends JFrame {
     private Paint paint;
     private boolean isManager;
     private String username;
+    private int counter = 0;
     JFrame frame;
     private Thread updateUserThread;
     private RemoteUser remoteUser;
@@ -28,6 +33,86 @@ public class Whiteboard extends JFrame {
         frame = new JFrame("Whiteboard");
         frame.setLayout(null);
         frame.setSize(1000, 1500);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int choice;
+                choice = JOptionPane.showConfirmDialog(null, "Confirm to exit?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                if(choice == JOptionPane.YES_OPTION){
+                    System.exit(0);
+                }
+            }
+        });
+
+        if (this.isManager) {
+            JMenuBar menuBar = new JMenuBar();
+            frame.setJMenuBar(menuBar);
+            JMenu fileMenu = new JMenu("Manager Access");
+
+            this.connection = null;
+            JMenuItem save = new JMenuItem("Save");
+            save.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String filePath = "image.png";
+                    paint.saveImage(filePath);
+                    JOptionPane.showMessageDialog(null, "Save the image successfully!");
+                }
+            });
+            JMenuItem saveAs = new JMenuItem("Save As");
+            saveAs.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image", "png");
+                    String imageName = String.format("%s(%d)", "image", counter);
+                    fileChooser.setCurrentDirectory(new File("/haofengchen/Desktop/" + imageName));
+                    counter ++;
+
+                    fileChooser.setFileFilter(filter);
+                    int result = fileChooser.showSaveDialog(null);
+                    if(result == JFileChooser.APPROVE_OPTION) {
+                        File file = fileChooser.getSelectedFile();
+                        String fileName = file.getPath();
+                        paint.saveImage(fileName);
+                        JOptionPane.showMessageDialog(null, "Save the image successfully!");
+                    }
+                }
+            });
+            JMenuItem kickOut = new JMenuItem("Kick Out");
+            kickOut.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String kickOutName = showInputDialog("Please input a username to kick out:");
+                    if (kickOutName != null && !kickOutName.isEmpty()) {
+                        try {
+                            if (kickOutName.equals(remoteUser.getManagerName())) {
+                                JOptionPane.showMessageDialog(null, "You are the manager!");
+                            } else {
+                                connection.kickOut(kickOutName);
+                            }
+                        } catch (RemoteException exception) {
+                            exception.printStackTrace();
+                        }
+                    }
+                }
+            });
+            JMenuItem close = new JMenuItem("Close");
+            close.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    paint.clearWhiteboard();
+                    frame.dispose();
+                    System.exit(0);
+                }
+            });
+
+            fileMenu.add(save);
+            fileMenu.add(saveAs);
+            fileMenu.add(kickOut);
+            fileMenu.add(close);
+            menuBar.add(fileMenu);
+        }
 
         JButton lineButton = new JButton(LINE);
         JButton circleButton = new JButton(CIRCLE);
@@ -142,6 +227,19 @@ public class Whiteboard extends JFrame {
     public void rejected() {
         JOptionPane.showMessageDialog(null, "You are rejected by manager!");
         updateUserThread.interrupt();
+        System.exit(0);
+    }
+
+    public void kickOut() {
+        JOptionPane.showMessageDialog(null, "You are kicked out by the manager!");
+        frame.dispose();
+        System.exit(0);
+    }
+
+    public void managerClose() {
+        JOptionPane.showMessageDialog(null, "The manager is closing the frame!!!");
+        connection.managerDisconnect(username);
+        frame.dispose();
         System.exit(0);
     }
 

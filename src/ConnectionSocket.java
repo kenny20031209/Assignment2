@@ -91,11 +91,11 @@ public class ConnectionSocket {
         out.flush();
     }
 
-//    public void kickOutRequest() throws IOException {
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("Request", kickOutUser);
-//        System.out.println("Send: " + jsonObject);
-//        out.write(jsonObject.toJSONString());
-//        out.flush();
-//    }
+    public void kickOutRequest() throws IOException {
+        JSONObject object = new JSONObject();
+        object.put("Request", Connection.kickOutUser);
+        System.out.println("Send: " + object);
+        out.writeUTF(object.toJSONString());
+        out.flush();
+    }
 }

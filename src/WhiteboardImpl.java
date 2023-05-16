@@ -64,6 +64,10 @@ public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas,
         img = image;
     }
 
+    public void clear() throws RemoteException {
+        img.clear();
+    }
+
     @Override
     public List<String> getUsernames() throws RemoteException {
         return usernames;

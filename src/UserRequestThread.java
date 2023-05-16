@@ -1,8 +1,6 @@
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import javax.print.MultiDocPrintService;
 import java.io.IOException;
 
 public class UserRequestThread extends Thread {
@@ -57,6 +55,22 @@ public class UserRequestThread extends Thread {
                             waitingSocket.joinResult("Response", Connection.Rejected, false, waitingName);
                             manager.rejectWaitingName(waitingName);
                         }
+                        break;
+                    }
+                    case Connection.kickOutUser -> {
+                        String kickOutName = (String) object.get("Username");
+                        ConnectionSocket socket = manager.getConnectionSocket(kickOutName);
+                        socket.kickOutRequest();
+                        manager.removeUser(kickOutName);
+                        break;
+                    }
+                    case Connection.leave -> {
+                        String leaveUserName = (String) object.get("Username");
+                        manager.removeUser(leaveUserName);
+                        break;
+                    }
+                    case Connection.close -> {
+                        manager.clear();
                         break;
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + requestType);

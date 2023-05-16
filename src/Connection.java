@@ -17,17 +17,19 @@ public class Connection {
     final static String noManager = "No manager";
     final static String AskJoinWhiteboard = "Ask to Join Whiteboard";
     final static String AskJoinResult = "Ask to Join Result";
-    private final static String kickOutUser = "Kick out user";
+    final static String kickOutUser = "Kick out user";
+    final static String leave = "Leave";
+    final static String close = "Close";
 
     public Connection(ConnectionSocket socket){
         this.socket = socket;
     }
 
-    public void managerConnect(Whiteboard whiteboard, String username){
+    public void managerConnect(Whiteboard whiteboard, String managerName){
         JSONObject object = new JSONObject();
         JSONParser parser = new JSONParser();
         object.put("Request", createWhiteboard);
-        object.put("Manager Name", username);
+        object.put("Manager Name",managerName);
 
         String response = "";
         try {
@@ -36,7 +38,7 @@ public class Connection {
             object = (JSONObject) parser.parse(response);
             String resType = (String) object.get(response);
             if (resType == Created) {
-                whiteboard.initial((String) object.get(username));
+                whiteboard.initial((String) object.get(managerName));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,17 +71,38 @@ public class Connection {
         }
     }
 
-    public void disconnect(boolean isManager, String username) {
+    public void managerDisconnect(String managerName) {
         JSONObject object = new JSONObject();
-        if(isManager) {
-            object.put("Request", managerClose);
-            object.put("Username", username);
-        } else {
-            object.put("Request", userClose);
-            object.put("Username", username);
-        }
+        object.put("Request", managerClose);
+        object.put("Username", managerName);
 
         try {
+            socket.send(object.toString());
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void userDisconnect(String username) {
+        JSONObject object = new JSONObject();
+        object.put("Request", userClose);
+        object.put("Username", username);
+
+        try {
+            socket.send(object.toString());
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void kickOut(String username) {
+        JSONObject object = new JSONObject();
+        object.put("Request", kickOutUser);
+        object.put("Username", username);
+
+        try{
             socket.send(object.toString());
         } catch (IOException e) {
             e.printStackTrace();

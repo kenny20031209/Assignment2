@@ -10,4 +10,5 @@ public interface RemoteCanvas extends Remote{
     void makeOval(int x, int y, int width, int height, Color color) throws RemoteException;
     void makeRectangle(int x, int y, int width, int height, Color color) throws RemoteException;
     void setImage(SerializableImage image) throws RemoteException;
+    void clear() throws RemoteException;
 }

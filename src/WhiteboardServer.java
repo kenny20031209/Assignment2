@@ -1,5 +1,4 @@
 import javax.net.ServerSocketFactory;
-import java.awt.image.TileObserver;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,7 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class WhiteboardServer{
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
         Manager manager = new Manager();
         try{
             RemoteCanvas remoteCanvas = new WhiteboardImpl();
