@@ -5,12 +5,17 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 
-public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas {
+public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas, RemoteUser {
     private SerializableImage img;
+    private String managerName;
+    private List<String> usernames;
 
     public WhiteboardImpl() throws RemoteException{
-        img = new SerializableImage(new BufferedImage(980, 800, BufferedImage.TYPE_INT_ARGB));
+        img = new SerializableImage(new BufferedImage(980, 500, BufferedImage.TYPE_INT_ARGB));
+        usernames = new ArrayList<>();
     }
 
     public SerializableImage getImage() throws RemoteException {
@@ -57,5 +62,25 @@ public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas 
 
     public void setImage(SerializableImage image) throws RemoteException {
         img = image;
+    }
+
+    @Override
+    public List<String> getUsernames() throws RemoteException {
+        return usernames;
+    }
+
+    @Override
+    public String getManagerName() throws RemoteException {
+        return managerName;
+    }
+
+    @Override
+    public void addUsername(String username) throws RemoteException {
+        usernames.add(username);
+    }
+
+    @Override
+    public void setManagerName(String managerName) throws RemoteException {
+        this.managerName = managerName;
     }
 }
