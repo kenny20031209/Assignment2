@@ -1,3 +1,6 @@
+import org.json.simple.JSONObject;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -7,7 +10,7 @@ import java.rmi.registry.Registry;
 public class JoinWhiteboard {
     private static String userName;
     public static void main(String args[]){
-        userName = "123";
+        userName = "David";
 
         Whiteboard whiteboard = new Whiteboard(false);
         try{
@@ -18,11 +21,12 @@ public class JoinWhiteboard {
             whiteboard.setRemoteCanvas(remoteCanvas);
             whiteboard.setRemoteUser(remoteUser);
 
-            ConnectionSocket socket = new ConnectionSocket("localhost", 1233);
+            ConnectionSocket socket = new ConnectionSocket("localhost", 1235);
             Connection connection = new Connection(socket);
             whiteboard.setConnection(connection);
+            JOptionPane.showMessageDialog(null, "Please wait for manager confirmation!");
             connection.userConnect(whiteboard, userName);
-            System.out.println("Whiteboard joined");
+            System.out.println("Joined");
 
             while(true) {
                 String request = socket.receive();

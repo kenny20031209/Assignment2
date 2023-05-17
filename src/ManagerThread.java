@@ -4,7 +4,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 
-public class ManagerThread extends Thread{
+public class ManagerThread extends Thread {
     private Whiteboard whiteboard;
     private String request;
     private ConnectionSocket socket;
@@ -23,8 +23,8 @@ public class ManagerThread extends Thread{
         try {
             object = (JSONObject) parser.parse(request);
             String requestType = (String) object.get("Request");
-            if (requestType == Connection.AskJoinWhiteboard) {
-                String waitingName = (String) object.get("Username");
+            if (requestType.equals(Connection.AskJoinWhiteboard)) {
+                String waitingName = (String) object.get("Waiting Name");
                 boolean result = whiteboard.askAcceptWaitingName(waitingName);
                 socket.joinResult("Request", Connection.AskJoinResult, result, waitingName);
             } else {

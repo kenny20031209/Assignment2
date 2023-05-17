@@ -47,22 +47,6 @@ public class ConnectionSocket {
         out.close();
     }
 
-    public void existManager() throws IOException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Response", Connection.existManager);
-        System.out.println("Send: " + jsonObject);
-        out.writeUTF(jsonObject.toJSONString());
-        out.flush();
-    }
-
-    public void noManager() throws IOException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Response", Connection.noManager);
-        System.out.println("Send: " + jsonObject);
-        out.writeUTF(jsonObject.toJSONString());
-        out.flush();
-    }
-
     public void createWhiteboard(String username) throws IOException {
         JSONObject object = new JSONObject();
         object.put("Response", Connection.Created);

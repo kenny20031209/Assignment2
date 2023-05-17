@@ -48,7 +48,7 @@ public class UserRequestThread extends Thread {
                         boolean result = Boolean.parseBoolean((String) object.get("Result"));
                         ConnectionSocket waitingSocket = manager.getConnectionSocket(waitingName);
                         assert waitingSocket != null;
-                        if(result) {
+                        if (result) {
                             waitingSocket.joinResult("Response", Connection.Joined, true, waitingName);
                             manager.acceptWaitingName(waitingName);
                         } else {

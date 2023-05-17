@@ -3,6 +3,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Connection {
     private ConnectionSocket socket;
@@ -13,8 +14,6 @@ public class Connection {
     public final static String Joined = "Whiteboard Joined Successfully";
     public final static String managerClose = "Manager Close";
     public final static String userClose = "User Close";
-    final static String existManager = "Manager exits";
-    final static String noManager = "No manager";
     final static String AskJoinWhiteboard = "Ask to Join Whiteboard";
     final static String AskJoinResult = "Ask to Join Result";
     final static String kickOutUser = "Kick out user";
@@ -36,8 +35,8 @@ public class Connection {
             socket.send(object.toString());
             response = socket.receive();
             object = (JSONObject) parser.parse(response);
-            String resType = (String) object.get(response);
-            if (resType == Created) {
+            String resType = (String) object.get("Response");
+            if (Objects.equals(resType, Created)) {
                 whiteboard.initial((String) object.get(managerName));
             }
         } catch (IOException e) {
@@ -58,10 +57,10 @@ public class Connection {
             socket.send(object.toString());
             response = socket.receive();
             object = (JSONObject) parser.parse(response);
-            String resType = (String) object.get(response);
-            if (resType == Joined) {
+            String resType = (String) object.get("Response");
+            if (Objects.equals(resType, Joined)) {
                 whiteboard.initial((String) object.get(username));
-            } else if (resType == Rejected) {
+            } else if (Objects.equals(resType, Rejected)) {
                 whiteboard.rejected();
             }
         } catch (IOException e) {
@@ -74,7 +73,7 @@ public class Connection {
     public void managerDisconnect(String managerName) {
         JSONObject object = new JSONObject();
         object.put("Request", managerClose);
-        object.put("Username", managerName);
+        object.put("Manager Name", managerName);
 
         try {
             socket.send(object.toString());

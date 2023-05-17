@@ -15,9 +15,8 @@ public class Whiteboard extends JFrame {
     JFrame frame;
     private Thread updateUserThread;
     private RemoteUser remoteUser;
-    private JLabel label;
     private Connection connection;
-    private boolean result = false;
+    private boolean result;
     private static final String LINE = "Line";
     private static final String CIRCLE = "Circle";
     private static final String OVAL = "Oval";
@@ -39,6 +38,12 @@ public class Whiteboard extends JFrame {
                 int choice;
                 choice = JOptionPane.showConfirmDialog(null, "Confirm to exit?", "Confirmation", JOptionPane.YES_NO_OPTION);
                 if(choice == JOptionPane.YES_OPTION){
+                    if(isManager){
+                        connection.managerDisconnect(username);
+                    } else {
+                        connection.userDisconnect(username);
+                    }
+                    frame.dispose();
                     System.exit(0);
                 }
             }
@@ -167,7 +172,6 @@ public class Whiteboard extends JFrame {
         whiteboardPanel.setBounds(10, 50 , 980, 500);
         frame.add(buttonPanel);
         frame.add(whiteboardPanel);
-        frame.setVisible(true);
     }
 
     public void setRemoteCanvas(RemoteCanvas remoteCanvas) {
@@ -200,7 +204,7 @@ public class Whiteboard extends JFrame {
                             usernameList.append(string).append("\n");
                         }
                         if(!usernameList.toString().equals(jTextArea2.getText())){
-                            jTextArea2.append(usernameList.toString());
+                            jTextArea2.setText(usernameList.toString());
                         }
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
@@ -221,6 +225,7 @@ public class Whiteboard extends JFrame {
     }
 
     public void initial(String username) {
+        frame.setVisible(true);
         this.username = username;
     }
 
@@ -232,6 +237,8 @@ public class Whiteboard extends JFrame {
 
     public void kickOut() {
         JOptionPane.showMessageDialog(null, "You are kicked out by the manager!");
+        updateUserThread.interrupt();
+        connection.userDisconnect(username);
         frame.dispose();
         System.exit(0);
     }
@@ -244,41 +251,15 @@ public class Whiteboard extends JFrame {
     }
 
     public boolean askAcceptWaitingName(String waitingName) {
-        label = new JLabel();
-        String message = waitingName + " want to join the whiteboard";
-        label.setText(message);
-        label.setBounds(80,6, 400, 40);
-
-        JButton confirm = new JButton("Accept");
-        confirm.setBounds(100,40,80,20);
-        confirm.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                result = true;
-                frame.setEnabled(true);
-            }
-        });
-
-        JButton reject = new JButton("Reject");
-        reject.setBounds(270,40,80,20);
-        reject.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                result = false;
-                frame.setEnabled(true);
-            }
-        });
-
-        JDialog dialog = new JDialog(frame, true);
-        frame.setEnabled(false);
-        dialog.setLayout(null);
-        dialog.add(label);
-        dialog.add(confirm);
-        dialog.add(reject);
-        dialog.pack();
-        dialog.setSize(new Dimension(500, 150));
-        dialog.setLocationRelativeTo(frame);
-        dialog.setVisible(true);
+        int choice;
+        choice = JOptionPane.showConfirmDialog(null, waitingName + " want to join the whiteboard", "Join Request", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.YES_OPTION) {
+            result = true;
+            frame.setEnabled(true);
+        } else {
+            result = false;
+            frame.setEnabled(false);
+        }
 
         return result;
     }
