@@ -1,5 +1,4 @@
 import org.json.simple.JSONObject;
-
 import java.io.*;
 import java.net.Socket;
 
@@ -78,6 +77,15 @@ public class ConnectionSocket {
     public void kickOutRequest() throws IOException {
         JSONObject object = new JSONObject();
         object.put("Request", Connection.kickOutUser);
+        System.out.println("Send: " + object);
+        out.writeUTF(object.toJSONString());
+        out.flush();
+    }
+
+    public void receiveMessage(String message) throws IOException {
+        JSONObject object = new JSONObject();
+        object.put("Response", message);
+//        object.put("Username", username);
         System.out.println("Send: " + object);
         out.writeUTF(object.toJSONString());
         out.flush();

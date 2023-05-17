@@ -64,17 +64,22 @@ public class UserRequestThread extends Thread {
                         manager.removeUser(kickOutName);
                         break;
                     }
-                    case Connection.leave -> {
+                    case Connection.userClose -> {
                         String leaveUserName = (String) object.get("Username");
                         manager.removeUser(leaveUserName);
                         break;
                     }
-                    case Connection.close -> {
+                    case Connection.managerClose -> {
                         manager.clear();
                         break;
                     }
-                    default -> throw new IllegalStateException("Unexpected value: " + requestType);
+                    default -> {
+                        String message = (String) object.get("Request");
+//                        String username = (String) object.get("Username");
+                        socket.receiveMessage(message);
+                    }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

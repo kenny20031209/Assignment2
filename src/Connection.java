@@ -2,6 +2,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -17,8 +18,6 @@ public class Connection {
     final static String AskJoinWhiteboard = "Ask to Join Whiteboard";
     final static String AskJoinResult = "Ask to Join Result";
     final static String kickOutUser = "Kick out user";
-    final static String leave = "Leave";
-    final static String close = "Close";
 
     public Connection(ConnectionSocket socket){
         this.socket = socket;
@@ -70,23 +69,28 @@ public class Connection {
         }
     }
 
-    public void managerDisconnect(String managerName) {
-        JSONObject object = new JSONObject();
-        object.put("Request", managerClose);
-        object.put("Manager Name", managerName);
+//    public void managerDisconnect(String managerName) {
+//        JSONObject object = new JSONObject();
+//        object.put("Request", managerClose);
+//        object.put("Manager Name", managerName);
+//
+//        try {
+//            socket.send(object.toString());
+//            socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-        try {
-            socket.send(object.toString());
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void disconnect(Boolean isManager, String username) {
+        JSONObject object = new JSONObject();
+        if (isManager) {
+            object.put("Request", managerClose);
+            object.put("Manager Name", username);
+        } else {
+            object.put("Request", userClose);
+            object.put("Username", username);
         }
-    }
-
-    public void userDisconnect(String username) {
-        JSONObject object = new JSONObject();
-        object.put("Request", userClose);
-        object.put("Username", username);
 
         try {
             socket.send(object.toString());
@@ -105,6 +109,22 @@ public class Connection {
             socket.send(object.toString());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(String message, String username){
+        JSONObject object = new JSONObject();
+        if (!message.isEmpty()){
+            object.put("Request", message);
+//            object.put("Username", username);
+
+            try {
+                socket.send(object.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please input a massage!");
         }
     }
 }

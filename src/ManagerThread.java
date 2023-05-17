@@ -22,13 +22,14 @@ public class ManagerThread extends Thread {
 
         try {
             object = (JSONObject) parser.parse(request);
-            String requestType = (String) object.get("Request");
-            if (requestType.equals(Connection.AskJoinWhiteboard)) {
+            if (Connection.AskJoinWhiteboard.equals((String) object.get("Request"))) {
                 String waitingName = (String) object.get("Waiting Name");
                 boolean result = whiteboard.askAcceptWaitingName(waitingName);
                 socket.joinResult("Request", Connection.AskJoinResult, result, waitingName);
             } else {
-                System.out.println("Unknown Request!");
+                String message = (String) object.get("Response");
+//                String username = (String) object.get("Username");
+                whiteboard.displayMessage(message);
             }
         } catch (ParseException e) {
             e.printStackTrace();

@@ -17,6 +17,7 @@ public class Whiteboard extends JFrame {
     private RemoteUser remoteUser;
     private Connection connection;
     private boolean result;
+    JTextArea area;
     private static final String LINE = "Line";
     private static final String CIRCLE = "Circle";
     private static final String OVAL = "Oval";
@@ -32,20 +33,17 @@ public class Whiteboard extends JFrame {
         frame = new JFrame("Whiteboard");
         frame.setLayout(null);
         frame.setSize(1000, 1500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                int choice;
-                choice = JOptionPane.showConfirmDialog(null, "Confirm to exit?", "Confirmation", JOptionPane.YES_NO_OPTION);
-                if(choice == JOptionPane.YES_OPTION){
-                    if(isManager){
-                        connection.managerDisconnect(username);
-                    } else {
-                        connection.userDisconnect(username);
-                    }
-                    frame.dispose();
-                    System.exit(0);
+                connection.disconnect(isManager, username);
+                if(isManager) {
+                    paint.clearWhiteboard();
                 }
+                updateUserThread.interrupt();
+                e.getWindow().dispose();
+                System.exit(0);
             }
         });
 
@@ -170,12 +168,38 @@ public class Whiteboard extends JFrame {
 
         WhiteboardPanel whiteboardPanel = new WhiteboardPanel(paint);
         whiteboardPanel.setBounds(10, 50 , 980, 500);
+        JTextField field = new JTextField();
+        field.setBounds(500, 850, 400, 50);
+        field.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                connection.sendMessage(field.getText().trim(), username);
+                field.setText("");
+            }
+        });
+        area = new JTextArea();
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(area);
+        area.setBounds(500, 580, 400, 250);
+        scrollPane.setBounds(500, 580, 440, 250);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        area.setEditable(false);
         frame.add(buttonPanel);
         frame.add(whiteboardPanel);
+        frame.add(field);
+        frame.add(area);
+        frame.add(scrollPane);
     }
 
     public void setRemoteCanvas(RemoteCanvas remoteCanvas) {
         paint.setRemoteCanvas(remoteCanvas);
+    }
+
+    public void displayMessage(String message) {
+//        String messageFormat = String.format("%s", message);
+        area.append(message + "\n");
+        frame.add(area);
     }
     public void setRemoteUser(RemoteUser remoteUser) {
         this.remoteUser = remoteUser;
@@ -238,14 +262,15 @@ public class Whiteboard extends JFrame {
     public void kickOut() {
         JOptionPane.showMessageDialog(null, "You are kicked out by the manager!");
         updateUserThread.interrupt();
-        connection.userDisconnect(username);
+        connection.disconnect(isManager, username);
         frame.dispose();
         System.exit(0);
     }
 
     public void managerClose() {
         JOptionPane.showMessageDialog(null, "The manager is closing the frame!!!");
-        connection.managerDisconnect(username);
+        updateUserThread.interrupt();
+        connection.disconnect(isManager, username);
         frame.dispose();
         System.exit(0);
     }
