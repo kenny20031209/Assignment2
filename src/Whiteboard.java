@@ -27,6 +27,12 @@ public class Whiteboard extends JFrame {
             Color.GRAY, Color.GREEN, Color.LIGHT_GRAY, Color.MAGENTA,
             Color.ORANGE, Color.PINK, Color.RED, new Color(0,0,128), Color.YELLOW,
             new Color(128, 0, 128), new Color(0, 128, 128), new Color(128, 128, 0)};
+
+    public void initial(String username) {
+        frame.setVisible(true);
+        this.username = username;
+    }
+
     public Whiteboard(boolean isManager) {
         this.paint = new Paint();
         this.isManager = isManager;
@@ -196,9 +202,9 @@ public class Whiteboard extends JFrame {
         paint.setRemoteCanvas(remoteCanvas);
     }
 
-    public void displayMessage(String message) {
-//        String messageFormat = String.format("%s", message);
-        area.append(message + "\n");
+    public void displayMessage(String message, String username) {
+        String messageFormat = String.format("%s (%s)", message, username);
+        area.append(messageFormat + "\n");
         frame.add(area);
     }
     public void setRemoteUser(RemoteUser remoteUser) {
@@ -246,11 +252,6 @@ public class Whiteboard extends JFrame {
 
     public void setConnection(Connection connection) {
         this.connection = connection;
-    }
-
-    public void initial(String username) {
-        frame.setVisible(true);
-        this.username = username;
     }
 
     public void rejected() {

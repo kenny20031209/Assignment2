@@ -2,8 +2,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.Objects;
-
 public class UserThread extends Thread{
     private Whiteboard whiteboard;
     private String request;
@@ -20,12 +18,15 @@ public class UserThread extends Thread{
 
         try {
             object = (JSONObject) parser.parse(request);
-            String reqType = (String) object.get("Request");
 
-            if (Objects.equals(reqType, Connection.kickOutUser)) {
+            if (Connection.kickOutUser.equals((String) object.get("Request"))) {
                 whiteboard.kickOut();
-            } else if (Objects.equals(reqType, Connection.managerClose)) {
+            } else if (Connection.managerClose.equals((String) object.get("Request"))) {
                 whiteboard.managerClose();
+            } else {
+                String message = (String) object.get("Response");
+                String username = (String) object.get("Username");
+                whiteboard.displayMessage(message, username);
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);

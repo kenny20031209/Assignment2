@@ -44,6 +44,7 @@ public class ConnectionSocket {
         socket.close();
         in.close();
         out.close();
+        System.out.println("Socket is closed!");
     }
 
     public void createWhiteboard(String username) throws IOException {
@@ -82,10 +83,10 @@ public class ConnectionSocket {
         out.flush();
     }
 
-    public void receiveMessage(String message) throws IOException {
+    public void receiveMessage(String message, String username) throws IOException {
         JSONObject object = new JSONObject();
         object.put("Response", message);
-//        object.put("Username", username);
+        object.put("Username", username);
         System.out.println("Send: " + object);
         out.writeUTF(object.toJSONString());
         out.flush();

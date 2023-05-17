@@ -28,8 +28,8 @@ public class ManagerThread extends Thread {
                 socket.joinResult("Request", Connection.AskJoinResult, result, waitingName);
             } else {
                 String message = (String) object.get("Response");
-//                String username = (String) object.get("Username");
-                whiteboard.displayMessage(message);
+                String username = (String) object.get("Username");
+                whiteboard.displayMessage(message, username);
             }
         } catch (ParseException e) {
             e.printStackTrace();

@@ -36,7 +36,7 @@ public class Connection {
             object = (JSONObject) parser.parse(response);
             String resType = (String) object.get("Response");
             if (Objects.equals(resType, Created)) {
-                whiteboard.initial((String) object.get(managerName));
+                whiteboard.initial((String) object.get("Manager Name"));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class Connection {
             object = (JSONObject) parser.parse(response);
             String resType = (String) object.get("Response");
             if (Objects.equals(resType, Joined)) {
-                whiteboard.initial((String) object.get(username));
+                whiteboard.initial((String) object.get("Username"));
             } else if (Objects.equals(resType, Rejected)) {
                 whiteboard.rejected();
             }
@@ -116,7 +116,7 @@ public class Connection {
         JSONObject object = new JSONObject();
         if (!message.isEmpty()){
             object.put("Request", message);
-//            object.put("Username", username);
+            object.put("Username", username);
 
             try {
                 socket.send(object.toString());

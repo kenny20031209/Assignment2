@@ -75,8 +75,8 @@ public class UserRequestThread extends Thread {
                     }
                     default -> {
                         String message = (String) object.get("Request");
-//                        String username = (String) object.get("Username");
-                        socket.receiveMessage(message);
+                        String username = (String) object.get("Username");
+                        socket.receiveMessage(message, username);
                     }
                 }
 

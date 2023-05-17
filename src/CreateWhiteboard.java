@@ -26,7 +26,6 @@ public class CreateWhiteboard {
                 String request = socket.receive();
                 ManagerThread managerThread = new ManagerThread(whiteboard, request, socket);
                 managerThread.start();
-                System.out.println("Manager socket is ready!");
             }
         } catch (RemoteException e) {
             e.printStackTrace();
