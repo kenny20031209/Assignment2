@@ -17,7 +17,6 @@ public class Whiteboard extends JFrame {
     private RemoteUser remoteUser;
     private Connection connection;
     private boolean result;
-    JTextArea area;
     private static final String LINE = "Line";
     private static final String CIRCLE = "Circle";
     private static final String OVAL = "Oval";
@@ -38,7 +37,7 @@ public class Whiteboard extends JFrame {
         this.isManager = isManager;
         frame = new JFrame("Whiteboard");
         frame.setLayout(null);
-        frame.setSize(1000, 1500);
+        frame.setSize(1000, 900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
@@ -175,51 +174,33 @@ public class Whiteboard extends JFrame {
         });
 
         WhiteboardPanel whiteboardPanel = new WhiteboardPanel(paint);
-        whiteboardPanel.setBounds(10, 50 , 980, 500);
-        JTextField field = new JTextField();
-        field.setBounds(500, 850, 400, 50);
-        field.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                connection.sendMessage(field.getText().trim(), username);
-                field.setText("");
-            }
-        });
-        area = new JTextArea();
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
-        JScrollPane scrollPane = new JScrollPane(area);
-        area.setBounds(500, 580, 400, 250);
-        scrollPane.setBounds(500, 580, 440, 250);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        area.setEditable(false);
+        whiteboardPanel.setBounds(10, 50 , 750, 500);
         frame.add(buttonPanel);
         frame.add(whiteboardPanel);
-        frame.add(field);
-        frame.add(area);
-        frame.add(scrollPane);
     }
 
     public void setRemoteCanvas(RemoteCanvas remoteCanvas) {
         paint.setRemoteCanvas(remoteCanvas);
     }
 
-    public void displayMessage(String message, String username) {
-        String messageFormat = String.format("%s (%s)", message, username);
-        area.append(messageFormat + "\n");
-        frame.add(area);
-    }
     public void setRemoteUser(RemoteUser remoteUser) {
         this.remoteUser = remoteUser;
 
+        JLabel jLabel1 = new JLabel();
+        jLabel1.setBounds(820, 50, 100, 20);
+        jLabel1.setText("Manager:");
         JTextArea jTextArea1 = new JTextArea();
-        jTextArea1.setBounds(10, 580, 120, 50);
+        jTextArea1.setBounds(820, 80, 100, 40);
         jTextArea1.setEditable(false);
+        JLabel jLabel2 = new JLabel();
+        jLabel2.setBounds(820, 150, 100, 20);
+        jLabel2.setText("User:");
         JTextArea jTextArea2 = new JTextArea();
-        jTextArea2.setBounds(10, 650, 120, 250);
+        jTextArea2.setBounds(820, 180, 100, 300);
         jTextArea2.setEditable(false);
-        jTextArea2.append("User:" + "\n");
+        frame.add(jLabel1);
         frame.add(jTextArea1);
+        frame.add(jLabel2);
         frame.add(jTextArea2);
 
         updateUserThread = new Thread() {
@@ -229,7 +210,7 @@ public class Whiteboard extends JFrame {
                 while (true) {
                     try{
                         String managerName = remoteUser.getManagerName();
-                        jTextArea1.setText("Manager:" + "\n" + managerName);
+                        jTextArea1.setText(managerName);
 
                         StringBuilder usernameList = new StringBuilder();
                         for(String string: remoteUser.getUsernames()) {

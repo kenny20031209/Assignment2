@@ -23,11 +23,11 @@ public class Connection {
         this.socket = socket;
     }
 
-    public void managerConnect(Whiteboard whiteboard, String managerName){
+    public void managerConnect(Whiteboard whiteboard, ChatWindow chatWindow,String managerName){
         JSONObject object = new JSONObject();
         JSONParser parser = new JSONParser();
         object.put("Request", createWhiteboard);
-        object.put("Manager Name",managerName);
+        object.put("Manager Name", managerName);
 
         String response = "";
         try {
@@ -37,6 +37,8 @@ public class Connection {
             String resType = (String) object.get("Response");
             if (Objects.equals(resType, Created)) {
                 whiteboard.initial((String) object.get("Manager Name"));
+                chatWindow.start((String) object.get("Manager Name"));
+                System.out.println(managerName);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,7 +47,7 @@ public class Connection {
         }
     }
 
-    public void userConnect(Whiteboard whiteboard, String username) {
+    public void userConnect(Whiteboard whiteboard, ChatWindow chatWindow, String username) {
         JSONObject object = new JSONObject();
         JSONParser parser = new JSONParser();
         object.put("Request", joinWhiteboard);
@@ -59,6 +61,7 @@ public class Connection {
             String resType = (String) object.get("Response");
             if (Objects.equals(resType, Joined)) {
                 whiteboard.initial((String) object.get("Username"));
+                chatWindow.start((String) object.get("Username"));
             } else if (Objects.equals(resType, Rejected)) {
                 whiteboard.rejected();
             }

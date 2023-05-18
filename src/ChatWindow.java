@@ -9,15 +9,23 @@ public class ChatWindow {
     JFrame frame;
     JTextArea area;
 
+    public void start(String username) {
+        frame.setVisible(true);
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
     public ChatWindow(){
-        frame = new JFrame("Chat Window");
+        frame = new JFrame("Chat Window (" + username + ")");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
         area = new JTextArea();
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
         JTextField field = new JTextField();
+        field.setPreferredSize(new Dimension(400, 40));
         field.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -35,14 +43,12 @@ public class ChatWindow {
         frame.setVisible(true);
     }
 
-    public void start(String username) {
-        frame.setVisible(true);
-        this.username = username;
-    }
-
     public void showMessage(String message, String username) {
         String messageFormat = String.format("%s (%s)", message, username);
         area.append(messageFormat + "\n");
-        frame.add(area);
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }

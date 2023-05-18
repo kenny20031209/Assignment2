@@ -18,13 +18,16 @@ public class CreateWhiteboard {
 
             ConnectionSocket socket = new ConnectionSocket("localhost", 1235);
             Connection connection = new Connection(socket);
+            ChatWindow chatWindow = new ChatWindow();
             whiteboard.setConnection(connection);
-            connection.managerConnect(whiteboard, managerName);
+            chatWindow.setConnection(connection);
+
+            connection.managerConnect(whiteboard, chatWindow, managerName);
             System.out.println("Created!");
 
             while (true) {
                 String request = socket.receive();
-                ManagerThread managerThread = new ManagerThread(whiteboard, request, socket);
+                ManagerThread managerThread = new ManagerThread(whiteboard, chatWindow, request, socket);
                 managerThread.start();
             }
         } catch (RemoteException e) {

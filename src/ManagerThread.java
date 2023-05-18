@@ -6,11 +6,13 @@ import java.io.IOException;
 
 public class ManagerThread extends Thread {
     private Whiteboard whiteboard;
+    private ChatWindow chatWindow;
     private String request;
     private ConnectionSocket socket;
 
-    public ManagerThread(Whiteboard whiteboard, String request, ConnectionSocket socket){
+    public ManagerThread(Whiteboard whiteboard, ChatWindow chatWindow,String request, ConnectionSocket socket){
         this.whiteboard = whiteboard;
+        this.chatWindow = chatWindow;
         this.request = request;
         this.socket = socket;
     }
@@ -29,7 +31,8 @@ public class ManagerThread extends Thread {
             } else {
                 String message = (String) object.get("Response");
                 String username = (String) object.get("Username");
-                whiteboard.displayMessage(message, username);
+//                whiteboard.displayMessage(message, username);
+                chatWindow.showMessage(message,username);
             }
         } catch (ParseException e) {
             e.printStackTrace();

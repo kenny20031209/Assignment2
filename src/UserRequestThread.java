@@ -4,14 +4,18 @@ import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRequestThread extends Thread {
     private ConnectionSocket socket;
     private Manager manager;
+    private RemoteUser remoteUser;
 
-    public UserRequestThread(ConnectionSocket socket, Manager manager) {
+    public UserRequestThread(ConnectionSocket socket, Manager manager, RemoteUser remoteUser) {
         this.socket = socket;
         this.manager = manager;
+        this.remoteUser = remoteUser;
     }
 
     public void run() {
@@ -83,7 +87,17 @@ public class UserRequestThread extends Thread {
                     default -> {
                         String message = (String) object.get("Request");
                         String username = (String) object.get("Username");
-                        socket.receiveMessage(message, username);
+                        List<String> names = remoteUser.getUsernames();
+                        List<ConnectionSocket> messageUserSockets = new ArrayList<>();
+                        ConnectionSocket messageManagerSocket = manager.getManagerConnectionSocket();
+                        for (String name: names) {
+                            ConnectionSocket messageUserSocket = manager.getConnectionSocket(name);
+                            messageUserSockets.add(messageUserSocket);
+                        }
+                        for (ConnectionSocket messageSocket: messageUserSockets) {
+                            messageSocket.receiveMessage(message, username);
+                        }
+                        messageManagerSocket.receiveMessage(message, username);
                     }
                 }
 

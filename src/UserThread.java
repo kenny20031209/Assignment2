@@ -4,10 +4,12 @@ import org.json.simple.parser.ParseException;
 
 public class UserThread extends Thread{
     private Whiteboard whiteboard;
+    private  ChatWindow chatWindow;
     private String request;
 
-    public UserThread(Whiteboard whiteboard, String request) {
+    public UserThread(Whiteboard whiteboard, ChatWindow chatWindow,String request) {
         this.whiteboard = whiteboard;
+        this.chatWindow = chatWindow;
         this.request = request;
     }
 
@@ -26,7 +28,8 @@ public class UserThread extends Thread{
             } else {
                 String message = (String) object.get("Response");
                 String username = (String) object.get("Username");
-                whiteboard.displayMessage(message, username);
+//                whiteboard.displayMessage(message, username);
+                chatWindow.showMessage(message, username);
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);

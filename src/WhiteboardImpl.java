@@ -14,7 +14,7 @@ public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas,
     private List<String> usernames;
 
     public WhiteboardImpl() throws RemoteException{
-        img = new SerializableImage(new BufferedImage(980, 500, BufferedImage.TYPE_INT_ARGB));
+        img = new SerializableImage(new BufferedImage(750, 500, BufferedImage.TYPE_INT_ARGB));
         usernames = new ArrayList<>();
     }
 

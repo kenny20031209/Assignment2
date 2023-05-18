@@ -11,6 +11,7 @@ public class JoinWhiteboard {
         userName = "David";
 
         Whiteboard whiteboard = new Whiteboard(false);
+        ChatWindow chatWindow = new ChatWindow();
         try{
             Registry registry = LocateRegistry.getRegistry("localhost",1233);
             RemoteCanvas remoteCanvas = (RemoteCanvas) registry.lookup("RemoteCanvas");
@@ -22,13 +23,14 @@ public class JoinWhiteboard {
             ConnectionSocket socket = new ConnectionSocket("localhost", 1235);
             Connection connection = new Connection(socket);
             whiteboard.setConnection(connection);
+            chatWindow.setConnection(connection);
             JOptionPane.showMessageDialog(null, "Please wait for manager approval");
-            connection.userConnect(whiteboard, userName);
+            connection.userConnect(whiteboard, chatWindow, userName);
             System.out.println("Joined");
 
             while(true) {
                 String request = socket.receive();
-                UserThread thread = new UserThread(whiteboard, request);
+                UserThread thread = new UserThread(whiteboard, chatWindow, request);
                 thread.start();
             }
         } catch (RemoteException e) {
