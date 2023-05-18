@@ -3,6 +3,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Manager {
     private HashMap<String, ConnectionSocket> userSocket;
@@ -108,5 +109,23 @@ public class Manager {
             e.printStackTrace();
         }
         waitingNames.clear();
+    }
+
+    public synchronized void showManagerAction(String action) {
+        for (Map.Entry<String, ConnectionSocket> entry: userSocket.entrySet()) {
+            String username = entry.getKey();
+            ConnectionSocket socket = entry.getValue();
+
+            if(socket.isClosed()) {
+                System.out.println(username + " socket has already closed");
+            } else if(!username.equals(managerName)) {
+                System.out.println(username + " sent with manager operation: " + action);
+                try {
+                    socket.managerAction(action);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

@@ -69,28 +69,23 @@ public class Connection {
         }
     }
 
-//    public void managerDisconnect(String managerName) {
-//        JSONObject object = new JSONObject();
-//        object.put("Request", managerClose);
-//        object.put("Manager Name", managerName);
-//
-//        try {
-//            socket.send(object.toString());
-//            socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    public void disconnect(Boolean isManager, String username) {
+    public void managerDisconnect(String managerName) {
         JSONObject object = new JSONObject();
-        if (isManager) {
-            object.put("Request", managerClose);
-            object.put("Manager Name", username);
-        } else {
-            object.put("Request", userClose);
-            object.put("Username", username);
+        object.put("Request", managerClose);
+        object.put("Manager Name", managerName);
+
+        try {
+            socket.send(object.toString());
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    public void userDisconnect(String username) {
+        JSONObject object = new JSONObject();
+        object.put("Request", userClose);
+        object.put("Username", username);
 
         try {
             socket.send(object.toString());

@@ -1,6 +1,8 @@
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import javax.swing.*;
 import java.io.IOException;
 
 public class UserRequestThread extends Thread {
@@ -59,8 +61,12 @@ public class UserRequestThread extends Thread {
                     }
                     case Connection.kickOutUser -> {
                         String kickOutName = (String) object.get("Username");
-                        ConnectionSocket socket = manager.getConnectionSocket(kickOutName);
-                        socket.kickOutRequest();
+                        ConnectionSocket kickSocket = manager.getConnectionSocket(kickOutName);
+                        if (kickSocket != null) {
+                            kickSocket.kickOutRequest();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Please input a valid username!");
+                        }
                         manager.removeUser(kickOutName);
                         break;
                     }
@@ -70,6 +76,7 @@ public class UserRequestThread extends Thread {
                         break;
                     }
                     case Connection.managerClose -> {
+                        manager.showManagerAction(Connection.managerClose);
                         manager.clear();
                         break;
                     }

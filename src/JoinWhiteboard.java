@@ -1,5 +1,3 @@
-import org.json.simple.JSONObject;
-
 import javax.swing.*;
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -24,7 +22,7 @@ public class JoinWhiteboard {
             ConnectionSocket socket = new ConnectionSocket("localhost", 1235);
             Connection connection = new Connection(socket);
             whiteboard.setConnection(connection);
-            JOptionPane.showMessageDialog(null, "Please wait for manager confirmation!");
+            JOptionPane.showMessageDialog(null, "Please wait for manager approval");
             connection.userConnect(whiteboard, userName);
             System.out.println("Joined");
 

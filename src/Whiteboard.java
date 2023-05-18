@@ -43,9 +43,11 @@ public class Whiteboard extends JFrame {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                connection.disconnect(isManager, username);
                 if(isManager) {
                     paint.clearWhiteboard();
+                    connection.managerDisconnect(username);
+                } else {
+                    connection.userDisconnect(username);
                 }
                 updateUserThread.interrupt();
                 e.getWindow().dispose();
@@ -246,10 +248,6 @@ public class Whiteboard extends JFrame {
         updateUserThread.start();
     }
 
-    public boolean isManager() {
-        return isManager;
-    }
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
@@ -261,9 +259,9 @@ public class Whiteboard extends JFrame {
     }
 
     public void kickOut() {
-        JOptionPane.showMessageDialog(null, "You are kicked out by the manager!");
         updateUserThread.interrupt();
-        connection.disconnect(isManager, username);
+        JOptionPane.showMessageDialog(null, "You are kicked out by the manager!");
+        connection.userDisconnect(username);
         frame.dispose();
         System.exit(0);
     }
@@ -271,7 +269,11 @@ public class Whiteboard extends JFrame {
     public void managerClose() {
         JOptionPane.showMessageDialog(null, "The manager is closing the frame!!!");
         updateUserThread.interrupt();
-        connection.disconnect(isManager, username);
+        if (isManager){
+            connection.managerDisconnect(username);
+        } else {
+            connection.userDisconnect(username);
+        }
         frame.dispose();
         System.exit(0);
     }
@@ -286,7 +288,6 @@ public class Whiteboard extends JFrame {
             result = false;
             frame.setEnabled(false);
         }
-
         return result;
     }
 }

@@ -7,7 +7,6 @@ public class ConnectionSocket {
     private DataInputStream in;
     private DataOutputStream out;
 
-
     public ConnectionSocket(String serverAdd, int serverPort){
         try{
             this.socket = new Socket(serverAdd, serverPort);
@@ -24,7 +23,7 @@ public class ConnectionSocket {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Fail to create socket!");
         }
     }
 
@@ -78,6 +77,18 @@ public class ConnectionSocket {
     public void kickOutRequest() throws IOException {
         JSONObject object = new JSONObject();
         object.put("Request", Connection.kickOutUser);
+        System.out.println("Send: " + object);
+        out.writeUTF(object.toJSONString());
+        out.flush();
+    }
+
+    public boolean isClosed() {
+        return socket.isClosed();
+    }
+
+    public void managerAction(String action) throws IOException {
+        JSONObject object = new JSONObject();
+        object.put("Request", action);
         System.out.println("Send: " + object);
         out.writeUTF(object.toJSONString());
         out.flush();
