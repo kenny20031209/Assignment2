@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -35,7 +36,7 @@ public class CreateWhiteboard {
         } catch (NotBoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Error receive join requests from server");
+            JOptionPane.showMessageDialog(null, "You close the whiteboard and socket is closed!");
         }
     }
 }

@@ -1,8 +1,13 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 import static javax.swing.JOptionPane.showInputDialog;
@@ -58,8 +63,43 @@ public class Whiteboard extends JFrame {
             JMenuBar menuBar = new JMenuBar();
             frame.setJMenuBar(menuBar);
             JMenu fileMenu = new JMenu("Manager Access");
-
             this.connection = null;
+
+            JMenuItem newWhiteboard = new JMenuItem("New");
+            newWhiteboard.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            JMenuItem open = new JMenuItem("Open");
+            open.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFileChooser fileChooser = new JFileChooser();
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image", "png");
+                    fileChooser.setFileFilter(filter);
+                    int openDialog = fileChooser.showOpenDialog(frame);
+                    if (openDialog == JFileChooser.APPROVE_OPTION) {
+                        File file = fileChooser.getSelectedFile();
+                        try {
+                            FileInputStream fileInputStream = new FileInputStream(file);
+                        } catch (FileNotFoundException ex) {
+                            ex.printStackTrace();
+                        }
+                        BufferedImage image = null;
+                        try {
+                            image = ImageIO.read(file);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        paint.setImage(image);
+                        if (connection != null) {
+                            connection.notifyUser("Open File");
+                        }
+                    }
+                }
+            });
             JMenuItem save = new JMenuItem("Save");
             save.addActionListener(new ActionListener() {
                 @Override
@@ -112,11 +152,15 @@ public class Whiteboard extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     paint.clearWhiteboard();
+                    connection.managerDisconnect(username);
+                    updateUserThread.interrupt();
                     frame.dispose();
                     System.exit(0);
                 }
             });
 
+            fileMenu.add(newWhiteboard);
+            fileMenu.add(open);
             fileMenu.add(save);
             fileMenu.add(saveAs);
             fileMenu.add(kickOut);
@@ -221,6 +265,13 @@ public class Whiteboard extends JFrame {
                         }
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
+                    }
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        System.out.println("Thread fail to sleep!");
+                        break;
                     }
                 }
             }

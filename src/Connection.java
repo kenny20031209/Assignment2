@@ -18,6 +18,7 @@ public class Connection {
     final static String AskJoinWhiteboard = "Ask to Join Whiteboard";
     final static String AskJoinResult = "Ask to Join Result";
     final static String kickOutUser = "Kick out user";
+    final static String OpenFile = "Open File";
 
     public Connection(ConnectionSocket socket){
         this.socket = socket;
@@ -122,6 +123,16 @@ public class Connection {
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please input a massage!");
+        }
+    }
+
+    public void notifyUser(String action) {
+        JSONObject object = new JSONObject();
+        object.put("Request", action);
+        try {
+            socket.send(object.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

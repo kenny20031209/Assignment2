@@ -16,16 +16,17 @@ public class WhiteboardServer{
             Registry registry = LocateRegistry.createRegistry(1233);
             registry.rebind("RemoteCanvas", remoteCanvas);
             registry.rebind("RemoteUser", remoteUser);
-            System.out.println("RMI is ready!");
             manager.setRemoteUser(remoteUser);
+            System.out.println("RMI is ready!");
+
 
             ServerSocketFactory factory = ServerSocketFactory.getDefault();
             try(ServerSocket server = factory.createServerSocket(1235)) {
                 System.out.println("Socket is ready");
                 while (true) {
                     Socket socket = server.accept();
-                    UserRequestThread thread = new UserRequestThread(new ConnectionSocket(socket), manager, remoteUser);
-                    thread.start();
+                    UserRequestThread userRequestThread = new UserRequestThread(new ConnectionSocket(socket), manager, remoteUser);
+                    userRequestThread.start();
                 }
             } catch (IOException e) {
                 System.out.println("Fail to create server socket!");

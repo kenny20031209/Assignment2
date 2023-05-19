@@ -84,6 +84,10 @@ public class UserRequestThread extends Thread {
                         manager.clear();
                         break;
                     }
+                    case Connection.OpenFile -> {
+                        manager.showManagerAction(Connection.OpenFile);
+                        break;
+                    }
                     default -> {
                         String message = (String) object.get("Request");
                         String username = (String) object.get("Username");
@@ -102,7 +106,8 @@ public class UserRequestThread extends Thread {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Socket is closed!");
+                break;
             }
         }
     }

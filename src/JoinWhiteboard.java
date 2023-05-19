@@ -38,7 +38,7 @@ public class JoinWhiteboard {
         } catch (NotBoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Disconnect from server!");
         }
     }
 }

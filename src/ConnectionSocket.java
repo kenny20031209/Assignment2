@@ -43,7 +43,6 @@ public class ConnectionSocket {
         socket.close();
         in.close();
         out.close();
-        System.out.println("Socket is closed!");
     }
 
     public void createWhiteboard(String username) throws IOException {

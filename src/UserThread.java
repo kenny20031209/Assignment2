@@ -2,6 +2,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.swing.*;
+
 public class UserThread extends Thread{
     private Whiteboard whiteboard;
     private  ChatWindow chatWindow;
@@ -25,10 +27,11 @@ public class UserThread extends Thread{
                 whiteboard.kickOut();
             } else if (Connection.managerClose.equals((String) object.get("Request"))) {
                 whiteboard.managerClose();
+            } else if (Connection.OpenFile.equals((String) object.get("Request"))) {
+                JOptionPane.showMessageDialog(null, "Manager open a new file!");
             } else {
                 String message = (String) object.get("Response");
                 String username = (String) object.get("Username");
-//                whiteboard.displayMessage(message, username);
                 chatWindow.showMessage(message, username);
             }
         } catch (ParseException e) {
