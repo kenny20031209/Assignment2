@@ -31,7 +31,6 @@ public class ManagerThread extends Thread {
             } else {
                 String message = (String) object.get("Response");
                 String username = (String) object.get("Username");
-//                whiteboard.displayMessage(message, username);
                 chatWindow.showMessage(message,username);
             }
         } catch (ParseException e) {
