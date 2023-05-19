@@ -56,7 +56,7 @@ public class ConnectionSocket {
 
     public void joinRequest(String waitingName) throws IOException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Request", Connection.AskJoinWhiteboard);
+        jsonObject.put("Request", Connection.askJoinWhiteboard);
         jsonObject.put("Waiting Name", waitingName);
         System.out.println("Send: " + jsonObject);
         out.writeUTF(jsonObject.toJSONString());

@@ -22,6 +22,7 @@ public class ChatWindow {
         frame.setLayout(new BorderLayout());
 
         area = new JTextArea();
+        area.setEditable(false);
         JTextField field = new JTextField();
         field.setPreferredSize(new Dimension(400, 40));
         field.addActionListener(new ActionListener() {
@@ -31,7 +32,6 @@ public class ChatWindow {
                 field.setText("");
             }
         });
-
         JScrollPane scrollPane = new JScrollPane(area);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 

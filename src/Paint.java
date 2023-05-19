@@ -48,33 +48,23 @@ public class Paint {
         int radius = (int) Math.sqrt(Math.pow(end.getX()- start.getX(), 2) + Math.pow(end.getY() - start.getY(), 2));
 
         try{
-            remoteCanvas.makeCircle(start.x, start.y, radius,shapeColor);
+            remoteCanvas.makeCircle(start.x, start.y, radius, shapeColor);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     public void drawOval(Point start, Point end) {
-        int x1 = (int) Math.min(start.getX(), end.getX());
-        int y1 = (int) Math.min(start.getY(), end.getY());
-        int width = (int) Math.abs(start.getX() - end.getX());
-        int height = (int) Math.abs(start.getY() - end.getY());
-
         try{
-            remoteCanvas.makeOval(x1, y1, width, height, shapeColor);
+            remoteCanvas.makeOval(start.x, start.y, end.x, end.y, shapeColor);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     public void drawRectangle(Point start, Point end) {
-        int x1 = (int) Math.min(start.getX(), end.getX());
-        int y1 = (int) Math.min(start.getY(), end.getY());
-        int width = (int) Math.abs(start.getX() - end.getX());
-        int height = (int) Math.abs(start.getY() - end.getY());
-
         try{
-            remoteCanvas.makeRectangle(x1, y1, width, height, shapeColor);
+            remoteCanvas.makeRectangle(start.x, start.y, end.x, end.y, shapeColor);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

@@ -24,10 +24,10 @@ public class ManagerThread extends Thread {
 
         try {
             object = (JSONObject) parser.parse(request);
-            if (Connection.AskJoinWhiteboard.equals((String) object.get("Request"))) {
+            if (Connection.askJoinWhiteboard.equals((String) object.get("Request"))) {
                 String waitingName = (String) object.get("Waiting Name");
                 boolean result = whiteboard.askAcceptWaitingName(waitingName);
-                socket.joinResult("Request", Connection.AskJoinResult, result, waitingName);
+                socket.joinResult("Request", Connection.askJoinResult, result, waitingName);
             } else {
                 String message = (String) object.get("Response");
                 String username = (String) object.get("Username");

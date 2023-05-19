@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Manager {
-    private HashMap<String, ConnectionSocket> userSocket;
+    private Map<String, ConnectionSocket> userSocket;
     private String managerName = null;
     private RemoteUser remoteUser;
     private List<String> waitingNames;
@@ -20,9 +20,9 @@ public class Manager {
         this.remoteUser = remoteUser;
     }
 
-    public synchronized String addUser(String username) {
+    public synchronized String addNewUser(String username) {
         try{
-            if(managerName == null) {
+            if (managerName == null) {
                 managerName = username;
                 remoteUser.setManagerName(managerName);
             } else {
@@ -34,32 +34,9 @@ public class Manager {
         return username;
     }
 
-    public synchronized String addWaitingName(String username) {
-        waitingNames.add(username);
-        return username;
-    }
-
-    public synchronized void acceptWaitingName(String username) {
-        if (waitingNames.contains(username)) {
-            waitingNames.remove(username);
-            try{
-                remoteUser.addUsername(username);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public synchronized void rejectWaitingName(String username) {
-        if (waitingNames.contains(username)) {
-            waitingNames.remove(username);
-            userSocket.remove(username);
-        }
-    }
-
     public synchronized void removeUser(String username) {
         try {
-            if(remoteUser.getUsernames().contains(username)) {
+            if (remoteUser.getUsernames().contains(username)) {
                 remoteUser.getUsernames().remove(username);
             }
         } catch (RemoteException e) {
@@ -76,6 +53,29 @@ public class Manager {
         }
     }
 
+    public synchronized String addWaitingName(String waitingName) {
+        waitingNames.add(waitingName);
+        return waitingName;
+    }
+
+    public synchronized void acceptWaitingName(String waitingName) {
+        if (waitingNames.contains(waitingName)) {
+            waitingNames.remove(waitingName);
+            try{
+                remoteUser.addUsername(waitingName);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public synchronized void rejectWaitingName(String waitingName) {
+        if (waitingNames.contains(waitingName)) {
+            waitingNames.remove(waitingName);
+            userSocket.remove(waitingName);
+        }
+    }
+
     public synchronized void addUserSocket(String username, ConnectionSocket socket) {
         if(!userSocket.containsKey(username)) {
             userSocket.put(username, socket);
@@ -85,15 +85,15 @@ public class Manager {
     }
 
     public synchronized ConnectionSocket getConnectionSocket(String username){
-        return userSocket.getOrDefault(username, null);
+        if (userSocket.containsKey(username)) {
+            return userSocket.get(username);
+        } else {
+            return null;
+        }
     }
 
     public synchronized ConnectionSocket getManagerConnectionSocket() {
         return userSocket.get(managerName);
-    }
-
-    public synchronized String getManagerName() {
-        return managerName;
     }
 
     public synchronized void setManagerName(String managerName) {
@@ -112,13 +112,10 @@ public class Manager {
     }
 
     public synchronized void showManagerAction(String action) {
-        for (Map.Entry<String, ConnectionSocket> entry: userSocket.entrySet()) {
-            String username = entry.getKey();
-            ConnectionSocket socket = entry.getValue();
-
-            if(socket.isClosed()) {
+        userSocket.forEach((username, socket) -> {
+            if (socket.isClosed()) {
                 System.out.println(username + " socket has already closed");
-            } else if(!username.equals(managerName)) {
+            } else if (!username.equals(managerName)) {
                 System.out.println(username + " sent with manager operation: " + action);
                 try {
                     socket.managerAction(action);
@@ -126,6 +123,6 @@ public class Manager {
                     e.printStackTrace();
                 }
             }
-        }
+        });
     }
 }

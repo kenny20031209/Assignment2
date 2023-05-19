@@ -36,7 +36,7 @@ public class UserRequestThread extends Thread {
                 String requestType = (String) object.get("Request");
                 switch (requestType) {
                     case Connection.createWhiteboard -> {
-                        String managerName = manager.addUser((String) object.get("Manager Name"));
+                        String managerName = manager.addNewUser((String) object.get("Manager Name"));
                         manager.setManagerName(managerName);
                         manager.addUserSocket(managerName, socket);
                         socket.createWhiteboard(managerName);
@@ -49,7 +49,7 @@ public class UserRequestThread extends Thread {
                         connectionSocket.joinRequest(username);
                         break;
                     }
-                    case Connection.AskJoinResult -> {
+                    case Connection.askJoinResult -> {
                         String waitingName = (String) object.get("Username");
                         boolean result = Boolean.parseBoolean((String) object.get("Result"));
                         ConnectionSocket waitingSocket = manager.getConnectionSocket(waitingName);
@@ -84,8 +84,8 @@ public class UserRequestThread extends Thread {
                         manager.clear();
                         break;
                     }
-                    case Connection.OpenFile -> {
-                        manager.showManagerAction(Connection.OpenFile);
+                    case Connection.openFile -> {
+                        manager.showManagerAction(Connection.openFile);
                         break;
                     }
                     default -> {

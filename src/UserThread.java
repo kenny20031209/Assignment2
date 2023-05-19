@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class UserThread extends Thread{
     private Whiteboard whiteboard;
-    private  ChatWindow chatWindow;
+    private ChatWindow chatWindow;
     private String request;
 
     public UserThread(Whiteboard whiteboard, ChatWindow chatWindow,String request) {
@@ -27,7 +27,7 @@ public class UserThread extends Thread{
                 whiteboard.kickOut();
             } else if (Connection.managerClose.equals((String) object.get("Request"))) {
                 whiteboard.managerClose();
-            } else if (Connection.OpenFile.equals((String) object.get("Request"))) {
+            } else if (Connection.openFile.equals((String) object.get("Request"))) {
                 JOptionPane.showMessageDialog(null, "Manager open a new file!");
             } else {
                 String message = (String) object.get("Response");

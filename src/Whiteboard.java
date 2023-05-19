@@ -65,37 +65,30 @@ public class Whiteboard extends JFrame {
             JMenu fileMenu = new JMenu("Manager Access");
             this.connection = null;
 
-            JMenuItem newWhiteboard = new JMenuItem("New");
-            newWhiteboard.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
             JMenuItem open = new JMenuItem("Open");
             open.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JFileChooser fileChooser = new JFileChooser();
-                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image", "png");
-                    fileChooser.setFileFilter(filter);
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Image", "png"));
                     int openDialog = fileChooser.showOpenDialog(frame);
                     if (openDialog == JFileChooser.APPROVE_OPTION) {
                         File file = fileChooser.getSelectedFile();
-                        try {
-                            FileInputStream fileInputStream = new FileInputStream(file);
+                        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+                            BufferedImage image = null;
+                            try {
+                                image = ImageIO.read(file);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            paint.setImage(image);
+                            if (connection != null) {
+                                connection.notifyUser("Open File");
+                            }
                         } catch (FileNotFoundException ex) {
                             ex.printStackTrace();
-                        }
-                        BufferedImage image = null;
-                        try {
-                            image = ImageIO.read(file);
                         } catch (IOException ex) {
                             ex.printStackTrace();
-                        }
-                        paint.setImage(image);
-                        if (connection != null) {
-                            connection.notifyUser("Open File");
                         }
                     }
                 }
@@ -115,11 +108,11 @@ public class Whiteboard extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     JFileChooser fileChooser = new JFileChooser();
                     FileNameExtensionFilter filter = new FileNameExtensionFilter("Image", "png");
-                    String imageName = String.format("%s(%d)", "image", counter);
-                    fileChooser.setCurrentDirectory(new File("/haofengchen/Desktop/" + imageName));
-                    counter ++;
-
+                    String imageName = String.format("%s(%d)", "image", counter++);
+                    File directory = new File("/haofengchen/Desktop/" + imageName);
+                    fileChooser.setCurrentDirectory(directory);
                     fileChooser.setFileFilter(filter);
+
                     int result = fileChooser.showSaveDialog(null);
                     if(result == JFileChooser.APPROVE_OPTION) {
                         File file = fileChooser.getSelectedFile();
@@ -159,7 +152,6 @@ public class Whiteboard extends JFrame {
                 }
             });
 
-            fileMenu.add(newWhiteboard);
             fileMenu.add(open);
             fileMenu.add(save);
             fileMenu.add(saveAs);
@@ -240,7 +232,7 @@ public class Whiteboard extends JFrame {
         jLabel2.setBounds(820, 150, 100, 20);
         jLabel2.setText("User:");
         JTextArea jTextArea2 = new JTextArea();
-        jTextArea2.setBounds(820, 180, 100, 300);
+        jTextArea2.setBounds(820, 180, 100, 350);
         jTextArea2.setEditable(false);
         frame.add(jLabel1);
         frame.add(jTextArea1);

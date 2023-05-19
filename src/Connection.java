@@ -9,16 +9,16 @@ import java.util.Objects;
 public class Connection {
     private ConnectionSocket socket;
     public final static String createWhiteboard = "Create Whiteboard";
-    final static String joinWhiteboard = "Join whiteboard";
+    final static String joinWhiteboard = "Join Whiteboard";
     public final static String Rejected = "Rejected";
-    public final static String Created = "Whiteboard Created Successfully";
-    public final static String Joined = "Whiteboard Joined Successfully";
+    public final static String Created = "Created Successfully";
+    public final static String Joined = "Joined Successfully";
     public final static String managerClose = "Manager Close";
     public final static String userClose = "User Close";
-    final static String AskJoinWhiteboard = "Ask to Join Whiteboard";
-    final static String AskJoinResult = "Ask to Join Result";
+    final static String askJoinWhiteboard = "Ask to Join Whiteboard";
+    final static String askJoinResult = "Ask to Join Result";
     final static String kickOutUser = "Kick out user";
-    final static String OpenFile = "Open File";
+    final static String openFile = "Open File";
 
     public Connection(ConnectionSocket socket){
         this.socket = socket;

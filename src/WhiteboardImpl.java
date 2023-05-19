@@ -22,41 +22,41 @@ public class WhiteboardImpl extends UnicastRemoteObject implements RemoteCanvas,
         return img;
     }
 
-    public void makeText(String text, int x, int y, Color color) throws RemoteException {
+    public void makeText(String text, int startX, int startY, Color color) throws RemoteException {
         Graphics graphics = img.getImage().getGraphics();
         graphics.setColor(color);
         graphics.setFont(new Font("Arial", Font.PLAIN,15));
-        graphics.drawString(text, x, y);
+        graphics.drawString(text, startX, startY);
     }
     @Override
-    public void makeLine(int x1, int y1, int x2, int y2, Color color) throws RemoteException {
+    public void makeLine(int startX, int startY, int endX, int endY, Color color) throws RemoteException {
         Graphics2D graphics = (Graphics2D) img.getImage().getGraphics();
         graphics.setColor(color);
-        Shape line = new Line2D.Double(x1, y1, x2, y2);
+        Shape line = new Line2D.Double(startX, startY, endX, endY);
         graphics.draw(line);
     }
 
     @Override
-    public void makeCircle(int x, int y, int radius, Color color) throws RemoteException {
+    public void makeCircle(int startX, int startY, int radius, Color color) throws RemoteException {
         Graphics2D graphics = (Graphics2D) img.getImage().getGraphics();
         graphics.setColor(color);
-        Shape circle = new Ellipse2D.Double(x - radius, y - radius, radius *2, radius *2);
+        Shape circle = new Ellipse2D.Double(startX - radius, startY - radius, radius *2, radius *2);
         graphics.draw(circle);
     }
 
     @Override
-    public void makeOval(int x, int y, int width, int height, Color color) throws RemoteException {
+    public void makeOval(int startX, int startY, int endX, int endY, Color color) throws RemoteException {
         Graphics2D graphics = (Graphics2D) img.getImage().getGraphics();
         graphics.setColor(color);
-        Shape oval = new Ellipse2D.Double(x, y, width, height);
+        Shape oval = new Ellipse2D.Double(startX, startY, endX - startX, endY - startY);
         graphics.draw(oval);
     }
 
     @Override
-    public void makeRectangle(int x, int y, int width, int height, Color color) throws RemoteException {
+    public void makeRectangle(int startX, int startY, int endX, int endY, Color color) throws RemoteException {
         Graphics2D graphics = (Graphics2D) img.getImage().getGraphics();
         graphics.setColor(color);
-        Shape rectangle = new Rectangle2D.Double(x, y, width, height);
+        Shape rectangle = new Rectangle2D.Double(startX, startY, endX - startX, endY - startY);
         graphics.draw(rectangle);
     }
 

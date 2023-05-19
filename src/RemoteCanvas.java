@@ -4,11 +4,11 @@ import java.rmi.RemoteException;
 
 public interface RemoteCanvas extends Remote{
     SerializableImage getImage() throws RemoteException;
-    void makeText(String text, int x, int y, Color color) throws RemoteException;
-    void makeLine(int x1, int y1, int x2, int y2, Color color) throws RemoteException;
-    void makeCircle(int x, int y, int radius, Color color) throws RemoteException;
-    void makeOval(int x, int y, int width, int height, Color color) throws RemoteException;
-    void makeRectangle(int x, int y, int width, int height, Color color) throws RemoteException;
+    void makeText(String text, int startX, int startY, Color color) throws RemoteException;
+    void makeLine(int startX, int startY, int endX, int endY, Color color) throws RemoteException;
+    void makeCircle(int startX, int startY, int radius, Color color) throws RemoteException;
+    void makeOval(int startX, int startY, int endX, int endY, Color color) throws RemoteException;
+    void makeRectangle(int startX, int startY, int endX, int endY, Color color) throws RemoteException;
     void setImage(SerializableImage image) throws RemoteException;
     void clear() throws RemoteException;
 }
