@@ -12,14 +12,12 @@ public class ChatWindow {
     public void start(String username) {
         frame.setVisible(true);
         this.username = username;
+        frame.setTitle("Chat Window (" + username + ")");
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public ChatWindow(){
-        frame = new JFrame("Chat Window (" + username + ")");
+        frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -39,8 +37,7 @@ public class ChatWindow {
 
         frame.add(scrollPane, BorderLayout.CENTER);
         frame.add(field, BorderLayout.SOUTH);
-        frame.setSize(500, 300);
-        frame.setVisible(true);
+        frame.setSize(500, 250);
     }
 
     public void showMessage(String message, String username) {

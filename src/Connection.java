@@ -38,7 +38,6 @@ public class Connection {
             if (Objects.equals(resType, Created)) {
                 whiteboard.initial((String) object.get("Manager Name"));
                 chatWindow.start((String) object.get("Manager Name"));
-                System.out.println(managerName);
             }
         } catch (IOException e) {
             e.printStackTrace();
