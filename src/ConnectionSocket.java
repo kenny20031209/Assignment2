@@ -4,14 +4,14 @@ import java.net.Socket;
 
 public class ConnectionSocket {
     private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
+    private BufferedReader in;
+    private BufferedWriter out;
 
     public ConnectionSocket(String serverAdd, int serverPort){
         try{
             this.socket = new Socket(serverAdd, serverPort);
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -20,8 +20,8 @@ public class ConnectionSocket {
     public ConnectionSocket(Socket socket) {
         try{
             this.socket = socket;
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
             System.out.println("Fail to create socket!");
         }
@@ -29,12 +29,13 @@ public class ConnectionSocket {
 
     public void send(String request) throws IOException {
         System.out.println("Send: " + request);
-        out.writeUTF(request);
+        out.write(request);
+        out.newLine();
         out.flush();
     }
 
     public String receive() throws IOException {
-        String receive = in.readUTF();
+        String receive = in.readLine();
         System.out.println("Receive: " + receive);
         return receive;
     }
@@ -50,16 +51,18 @@ public class ConnectionSocket {
         object.put("Response", Connection.Created);
         object.put("Manager Name", username);
         System.out.println("Send: " + object);
-        out.writeUTF(object.toJSONString());
+        out.write(object.toJSONString());
+        out.newLine();
         out.flush();
     }
 
     public void joinRequest(String waitingName) throws IOException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Request", Connection.askJoinWhiteboard);
-        jsonObject.put("Waiting Name", waitingName);
-        System.out.println("Send: " + jsonObject);
-        out.writeUTF(jsonObject.toJSONString());
+        JSONObject object = new JSONObject();
+        object.put("Request", Connection.askJoinWhiteboard);
+        object.put("Waiting Name", waitingName);
+        System.out.println("Send: " + object);
+        out.write(object.toJSONString());
+        out.newLine();
         out.flush();
     }
 
@@ -69,7 +72,8 @@ public class ConnectionSocket {
         object.put("Username", waitingName);
         object.put("Result", Boolean.toString(result));
         System.out.println("Send: " + object);
-        out.writeUTF(object.toJSONString());
+        out.write(object.toJSONString());
+        out.newLine();
         out.flush();
     }
 
@@ -77,7 +81,8 @@ public class ConnectionSocket {
         JSONObject object = new JSONObject();
         object.put("Request", Connection.kickOutUser);
         System.out.println("Send: " + object);
-        out.writeUTF(object.toJSONString());
+        out.write(object.toJSONString());
+        out.newLine();
         out.flush();
     }
 
@@ -89,7 +94,8 @@ public class ConnectionSocket {
         JSONObject object = new JSONObject();
         object.put("Request", action);
         System.out.println("Send: " + object);
-        out.writeUTF(object.toJSONString());
+        out.write(object.toJSONString());
+        out.newLine();
         out.flush();
     }
 
@@ -98,7 +104,8 @@ public class ConnectionSocket {
         object.put("Response", message);
         object.put("Username", username);
         System.out.println("Send: " + object);
-        out.writeUTF(object.toJSONString());
+        out.write(object.toJSONString());
+        out.newLine();
         out.flush();
     }
 }
