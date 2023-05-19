@@ -8,20 +8,25 @@ import java.rmi.registry.Registry;
 
 public class WhiteboardServer{
     public static void main(String[] args){
-        Manager manager = new Manager();
+        if(args.length != 1){
+            System.err.println("Format: java –jar WhiteboardServer.jar <port>");
+            System.exit(1);
+        }
 
-        try{
+        int port = Integer.parseInt(args[0]);
+
+        Manager manager = new Manager();
+        try {
             RemoteCanvas remoteCanvas = new WhiteboardImpl();
             RemoteUser remoteUser = new WhiteboardImpl();
-            Registry registry = LocateRegistry.createRegistry(1233);
+            Registry registry = LocateRegistry.createRegistry(port);
             registry.rebind("RemoteCanvas", remoteCanvas);
             registry.rebind("RemoteUser", remoteUser);
             manager.setRemoteUser(remoteUser);
             System.out.println("RMI is ready!");
 
-
             ServerSocketFactory factory = ServerSocketFactory.getDefault();
-            try(ServerSocket server = factory.createServerSocket(1235)) {
+            try (ServerSocket server = factory.createServerSocket(1000)) {
                 System.out.println("Socket is ready");
                 while (true) {
                     Socket socket = server.accept();

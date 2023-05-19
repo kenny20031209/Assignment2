@@ -6,27 +6,33 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class JoinWhiteboard {
-    private static String userName;
+
     public static void main(String args[]){
-        userName = "David";
+        if(args.length != 3){
+            System.err.println("Format: java –jar CreateWhiteboard.jar <serverIPAddress> <port> username");
+            System.exit(1);
+        }
+
+        String serverAddress = args[0];
+        int port = Integer.parseInt(args[1]);
+        String userName = args[2];
 
         Whiteboard whiteboard = new Whiteboard(false);
         ChatWindow chatWindow = new ChatWindow();
         try{
-            Registry registry = LocateRegistry.getRegistry("localhost",1233);
+            Registry registry = LocateRegistry.getRegistry(serverAddress, port);
             RemoteCanvas remoteCanvas = (RemoteCanvas) registry.lookup("RemoteCanvas");
             RemoteUser remoteUser = (RemoteUser) registry.lookup("RemoteUser");
 
             whiteboard.setRemoteCanvas(remoteCanvas);
             whiteboard.setRemoteUser(remoteUser);
 
-            ConnectionSocket socket = new ConnectionSocket("localhost", 1235);
+            ConnectionSocket socket = new ConnectionSocket(serverAddress, 1000);
             Connection connection = new Connection(socket);
             whiteboard.setConnection(connection);
             chatWindow.setConnection(connection);
             JOptionPane.showMessageDialog(null, "Please wait for manager approval");
             connection.userConnect(whiteboard, chatWindow, userName);
-            System.out.println("Joined");
 
             while(true) {
                 String request = socket.receive();
@@ -34,7 +40,7 @@ public class JoinWhiteboard {
                 thread.start();
             }
         } catch (RemoteException e) {
-            e.printStackTrace();
+            System.err.println("Fail to get server port!");
         } catch (NotBoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

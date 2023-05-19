@@ -100,6 +100,10 @@ public class Manager {
         this.managerName = managerName;
     }
 
+    public synchronized String getManagerName() {
+        return managerName;
+    }
+
     public synchronized void clear() {
         userSocket.clear();
         managerName = null;

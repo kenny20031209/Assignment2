@@ -6,25 +6,31 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class CreateWhiteboard {
-    private static String managerName = "Kenny";
 
     public static void main(String args[]){
+        if(args.length != 3){
+            System.err.println("Format: java –jar CreateWhiteboard.jar <serverIPAddress> <port> username");
+            System.exit(1);
+        }
+
+        String serverAddress = args[0];
+        int port = Integer.parseInt(args[1]);
+        String managerName = args[2];
+
         Whiteboard whiteboard = new Whiteboard(true);
-        try{
-            Registry registry = LocateRegistry.getRegistry("localhost",1233);
+        try {
+            Registry registry = LocateRegistry.getRegistry(serverAddress, port);
             RemoteCanvas remoteCanvas = (RemoteCanvas) registry.lookup("RemoteCanvas");
             RemoteUser remoteUser = (RemoteUser) registry.lookup( "RemoteUser");
             whiteboard.setRemoteCanvas(remoteCanvas);
             whiteboard.setRemoteUser(remoteUser);
 
-            ConnectionSocket socket = new ConnectionSocket("localhost", 1235);
+            ConnectionSocket socket = new ConnectionSocket(serverAddress, 1000);
             Connection connection = new Connection(socket);
             ChatWindow chatWindow = new ChatWindow();
             whiteboard.setConnection(connection);
             chatWindow.setConnection(connection);
-
             connection.managerConnect(whiteboard, chatWindow, managerName);
-            System.out.println("Created!");
 
             while (true) {
                 String request = socket.receive();
@@ -32,7 +38,7 @@ public class CreateWhiteboard {
                 managerThread.start();
             }
         } catch (RemoteException e) {
-            e.printStackTrace();
+            System.err.println("Fail to get server port!");
         } catch (NotBoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

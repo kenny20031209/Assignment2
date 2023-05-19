@@ -36,10 +36,14 @@ public class UserRequestThread extends Thread {
                 String requestType = (String) object.get("Request");
                 switch (requestType) {
                     case Connection.createWhiteboard -> {
-                        String managerName = manager.addNewUser((String) object.get("Manager Name"));
-                        manager.setManagerName(managerName);
-                        manager.addUserSocket(managerName, socket);
-                        socket.createWhiteboard(managerName);
+                        if (manager.getManagerName() != null) {
+                            socket.managerExist();
+                        } else {
+                            String managerName = manager.addNewUser((String) object.get("Manager Name"));
+                            manager.setManagerName(managerName);
+                            manager.addUserSocket(managerName, socket);
+                            socket.createWhiteboard(managerName);
+                        }
                         break;
                     }
                     case Connection.joinWhiteboard -> {

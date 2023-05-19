@@ -35,12 +35,13 @@ public class Whiteboard extends JFrame {
     public void initial(String username) {
         frame.setVisible(true);
         this.username = username;
+        frame.setTitle("Whiteboard (" + username + ")");
     }
 
     public Whiteboard(boolean isManager) {
         this.paint = new Paint();
         this.isManager = isManager;
-        frame = new JFrame("Whiteboard");
+        frame = new JFrame();
         frame.setLayout(null);
         frame.setSize(1000, 900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -274,6 +275,11 @@ public class Whiteboard extends JFrame {
 
     public void setConnection(Connection connection) {
         this.connection = connection;
+    }
+
+    public void error() {
+        System.out.println("The manager has existed. Try to join whiteboard instead.");
+        updateUserThread.interrupt();
     }
 
     public void rejected() {

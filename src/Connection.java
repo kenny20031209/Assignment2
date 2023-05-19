@@ -9,6 +9,7 @@ import java.util.Objects;
 public class Connection {
     private ConnectionSocket socket;
     public final static String createWhiteboard = "Create Whiteboard";
+    public final static String managerExist = "Manager Exits";
     final static String joinWhiteboard = "Join Whiteboard";
     public final static String Rejected = "Rejected";
     public final static String Created = "Created Successfully";
@@ -39,6 +40,9 @@ public class Connection {
             if (Objects.equals(resType, Created)) {
                 whiteboard.initial((String) object.get("Manager Name"));
                 chatWindow.start((String) object.get("Manager Name"));
+            } else if (Objects.equals(resType, managerExist)) {
+                whiteboard.error();
+                System.exit(0);
             }
         } catch (IOException e) {
             e.printStackTrace();
